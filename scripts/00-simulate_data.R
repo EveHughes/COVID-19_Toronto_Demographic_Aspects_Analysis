@@ -59,5 +59,5 @@ simulated_data$age_group |>
 # Check if the minimum value of "case_id" is 1
 simulated_data$case_id |> min() == 1
 
-# Check if the length of cases is 412122
+# Check if the length of "case_id" is 412122
 simulated_data$case_id |> length() == 412122
