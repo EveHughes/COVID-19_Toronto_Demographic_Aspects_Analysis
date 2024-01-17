@@ -1,44 +1,76 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleans the raw COVID-19 cases data
+# Author: Amie Liu
+# Date: 16 January 2024
+# Contact: amie.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: None
 
 #### Workspace setup ####
+#install.packages("tidyverse")
+
 library(tidyverse)
+library(janitor)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+# Read data
+raw_case_data <- read_csv("inputs/data/raw_case_data.csv")
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
+# Clean data, including case ID, age group, and gender
+# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html
+cleaned_case_data <-
+  raw_case_data |>
+  clean_names() |>
   mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
+    age_group =
+      case_match(
+        age_group,
+        "19 and younger" ~ "0-19",
+        "20 to 29 Years" ~ "20-29",
+        "30 to 39 Years" ~ "30-39",
+        "40 to 49 Years" ~ "40-49",
+        "50 to 59 Years" ~ "50-59",
+        "60 to 69 Years" ~ "60-69",
+        "70 to 79 Years" ~ "70-79",
+        "80 to 89 Years" ~ "80-89",
+        "90 and older" ~ "90+",
+      )
   ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
   mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
+    client_gender =
+      case_match(
+        client_gender,
+        "FEMALE" ~ "Female",
+        "MALE" ~ "Male",
+        "UNKNOWN" ~ "Other",
+        "NON-BINARY" ~ "Other",
+        "OTHER" ~ "Other",
+        "TRANSGENDER" ~ "Other",
+        "TRANS WOMAN" ~ "Other",
+        "TRANS MAN" ~ "Other",
+        "NOT LISTED, PLEASE SPECIFY" ~ "Other",
+      )
   ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
+  select(assigned_id, age_group, client_gender) |>
+  rename(case_id = assigned_id,
+         gender = client_gender
+         ) |>
   tidyr::drop_na()
 
+# Analysis data, including age group and gender
+analyzed_case_data <-
+  cleaned_case_data |>
+  select(age_group, gender)
+
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+# Save cleaned data
+write_csv(cleaned_case_data, "outputs/data/cleaned_data.csv")
+
+# Rename the cleaned data file
+file.rename("outputs/data/cleaned_data.csv", "outputs/data/cleaned_case_data.csv")
+
+# Save analyzed data
+write_csv(analyzed_case_data, "outputs/data/analysis_data.csv")
+
+# Rename the analyzed data file
+file.rename("outputs/data/analysis_data.csv", "outputs/data/analyzed_case_data.csv")
