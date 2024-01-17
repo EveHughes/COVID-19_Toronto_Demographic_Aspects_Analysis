@@ -1,5 +1,25 @@
-LLM: ChatGPT-4.
-Date: 2 January 2024
+LLM: ChatGPT-3.5.
+Date: 17 January 2024
+
+
+User
+How to solve this error: Error: 'outputs/data/cleaned_case_data.csv' does not exist in current working directory ('/cloud/project/outputs/paper')?
+ChatGPT
+It seems like your working directory in the Quarto Markdown document may not be set correctly to the project's root directory. To ensure that the correct path is used, you can set the working directory explicitly at the beginning of your Quarto Markdown document.
+
+Assuming your .qmd file is located in the outputs/paper/ directory, you can set the working directory to the project's root by adding the following code at the beginning of your .qmd document:
+
+markdown 
+Copy code
+# Set Working Directory
+```{r set-wd, include=FALSE}
+# Install and load necessary packages
+install.packages("here")
+library(here)
+
+# Set the working directory to the project's root
+setwd(here())
+
 
 
 User
