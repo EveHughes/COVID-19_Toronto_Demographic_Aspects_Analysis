@@ -12,10 +12,10 @@ This paper investigates the age and gender patterns of COVID-19 cases in Toronto
 
 The repo is structured as:
 
--   `input/data` contains the data sources used in analysis including the raw data.
--   `input/literature` contains the literature used in analysis.
--   `input/llm` contains the usage of llm including the entire Chatgpt conversations.
--   `input/sketches` contains sketches of the dataset and graphs.
+-   `inputs/data` contains the data sources used in analysis including the raw data.
+-   `inputs/literature` contains the literature used in analysis.
+-   `inputs/llm` contains the usage of llm including the entire Chatgpt conversations.
+-   `inputs/sketches` contains sketches of the dataset and graphs.
 -   `outputs/data` contains the cleaned dataset that was constructed.
 -   `outputs/paper` contains the files used to generate the paper, including the Quarto document and reference bibliography file, as well as the PDF of the paper. 
 -   `scripts` contains the R scripts used to simulate, download and clean data.
