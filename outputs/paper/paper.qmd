@@ -55,7 +55,7 @@ This paper is divided into the Data and Limitations sections. @sec-data Data del
 
 # Data {#sec-data}
 
-The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The details of the data cleaning process for the dataset 'COVID-19 Cases in Toronto' [@covidCases] are provided in @sec-appendix Appendix. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
+The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The details of the data cleaning process for the dataset 'COVID-19 Cases in Toronto' [@covidCases] are provided in [Appendix -@sec-appendix]. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
 
 ## Covid-19 Cases by Gender
 
@@ -166,9 +166,9 @@ Future research could address these limitations by exploring other demographic v
 \newpage
 
 
-# Appendix {#sec-appendix}
+# Appendix {-}
 
-## Data Cleaning
+# Data Cleaning {#sec-appendix}
 
 The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more within the COVID-19 cases in Toronto. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
 
