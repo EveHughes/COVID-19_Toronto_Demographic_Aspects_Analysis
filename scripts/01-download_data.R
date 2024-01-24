@@ -7,13 +7,11 @@
 # Pre-requisites: None
 
 #### Workspace setup ####
-#install.packages("opendatatoronto")
-#install.packages("dplyr")
-#install.packages("readr")
+# install.packages("opendatatoronto")
+# install.packages("tidyverse")
 
 library(opendatatoronto)
-library(dplyr)
-library(readr)
+library(tidyverse)
 
 #### Download COVID-19 cases in Toronto data ####
 # Code from: https://open.toronto.ca/dataset/covid-19-cases-in-toronto/

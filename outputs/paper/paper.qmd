@@ -1,12 +1,11 @@
 ---
-title: "Exploring the Demographic Aspects of COVID-19 in Toronto: Unravelling Age and Gender Patterns"
-subtitle: "Are the male elderly more susceptible to COVID-19?"
+title: "Exploring the Demographic Aspects of COVID-19 Cases in Toronto: Are the elderly males more susceptible to COVID-19?"
 author: 
   - Amie Liu
-thanks: "Code and data are available at: https://github.com/AmieLiu/COVID-19_Toronto_Demographic_Aspects_Analysis.git"
+thanks: "Code and data are available at:https://github.com/AmieLiu/COVID-19_Toronto_Demographic_Aspects_Analysis.git"
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Examining the age and gender patterns of COVID-19 cases in Toronto provides insights into the susceptibility of different demographic groups to the virus. This paper utilizes the dataset from Open Data Toronto, encompassing the period from January 22, 2020, to January 4, 2024. Contrary to the hypothesis that elderly males are more susceptible, the results reveal a pattern, with females aged 20-29 showing the highest susceptibility, exceeding 40,000 cases. This highlights the importance of understanding gender and age-specific patterns for effective public health interventions."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -30,16 +29,12 @@ setwd(here())
 
 ### Explore ###
 # Read cleaned case data
-# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore-1
-
 cleaned_case_data <- 
   read_csv(
     "outputs/data/cleaned_case_data.csv", 
     show_col_types = FALSE)
 
 # Read analyzed case data
-# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore-1
-
 analyzed_case_data <-
   read_csv(
     "outputs/data/analyzed_case_data.csv",
@@ -49,207 +44,151 @@ analyzed_case_data <-
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. 
+Global disease pandemics pose significant threats to public health and impact daily life worldwide. In December 2019, the outbreak of Coronavirus Disease 2019 (COVID-19) was identified and is caused by the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) [@newDisease]. This disease commonly manifests with respiratory symptoms similar to those of pneumonia, colds, or influenza, and some COVID-19 patients may experience severe illness [@aboutCovid]. Researchers have found that COVID-19 cases tend to be more severe in the elderly, with males experiencing a higher severity rate than females, highlighting the influence of gender and age differences on the severity of COVID-19 [@genderDifferences]. However, limited information is available regarding these gender and age differences that may influence susceptibility to COVID-19 [@pandemicEvolution]. This leads to a question: “Are the elderly males more susceptible to COVID-19?”
 
-The remainder of this paper is structured as follows. @sec-data....
+Researchers have collaborated to provide a better understanding of infectious agents and develop techniques to mitigate outbreaks. Public health and social measures (PHSMs) have been a significant technique in decreasing the transmission of viruses with pandemic potential [@phsm]. Understanding the demographic aspects of infection is crucial for exploring how different groups are affected and facilitating the formulation of effective Public Health and Social Measures (PHSMs). Moreover, this understanding can help with the resource allocation for vaccines and predict the demand for medical care across diverse demographic groups. 
 
+Given the observation by public health officials that Toronto has a high level of COVID-19 activity [@influenzaActivity], I conducted an analysis of the relationship between COVID-19 cases and age groups, as well as genders, in Toronto. My results indicate a pattern of susceptibility in the distribution of COVID-19 cases in Toronto, where the majority of age groups show a higher number of female cases compared to males. Specifically, the group of females aged 20-29 has the highest number of COVID-19 cases—more than 40,000 cases. Contrary to the hypothesis, my data does not show that elderly males are more susceptible to COVID-19. The observed pattern may be influenced by factors beyond age and gender demographics.
+
+This paper is divided into the Data and Limitations sections. @sec-data Data delves into the various sources used for data collection, cleaning, and analyzing processes, leveraging a comprehensive dataset provided by Toronto Public Health on the City of Toronto's Open Data Portal [@covidCases].  In addition, it provides a detailed analysis of the findings from the data. Moving forward, @sec-limitations Limitations reveal potential constraints, including considerations related to occupational exposure, geographical focus, variable measurement, and data accuracy, that might influence the interpretation of the main findings.
 
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The details of the data cleaning process for the dataset 'COVID-19 Cases in Toronto' [@covidCases] are provided in @sec-appendix Appendix. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
 
-## COVID-19 Cases Data
+## Covid-19 Cases by Gender
+
+Based on the bar chart of COVID-19 cases in Toronto by gender (see @fig-casebygender), the data reveals that females constitute the largest group, with 219,671 cases, comprising 53.4% of the total cases. Following closely, males represent the second-highest group, with 188,197 cases, accounting for 45.7% of the total cases. Additionally, 3,832 cases fall into the "Other" category, including transgender and not listed gender, making up 0.9% of the total cases. 
+
+The gender breakdown of COVID-19 cases highlights a distribution pattern, underscoring the importance of integrating gender-specific considerations into public health interventions. There are no significant differences between female and male cases. However, the higher occurrence of cases among females suggests a need for targeted measurements that consider gender-specific factors. These findings may prompt health officials to communicate and implement outreach strategies, ensuring the effectiveness of preventive measures and vaccination campaigns across diverse gender groups.
 
 ```{r}
-#| label: tbl-idcasetable
-#| fig-cap: First six rows of COVID-19 cases by age groups and gender
+#| label: fig-casebygender
+#| fig-cap: Number of covid-19 cases by gender
 #| echo: false
-#| message: false
 #| warning: false
+#| message: false
 
-# Reference: https://github.com/christina-wei/INF3104-1-Covid-Clinics/blob/main/outputs/paper/covid_clinics.qmd
-head(cleaned_case_data) |>
-  kable(
-    col.names = c("Case ID", "Age group", "Gender"),
-    booktabs = TRUE
-  )
+# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
+analyzed_case_data |> 
+  ggplot(aes(x = gender)) +
+  geom_bar() +
+  geom_text(
+    stat = 'count',
+    aes(label = scales::percent(..count.. / sum(..count..)),
+        y = ..count..),
+    vjust = -0.5,
+    position = position_stack(vjust = 0.5)
+  ) +
+  theme_minimal() +
+  labs(x = "Gender",
+       y = "Number of covid-19 cases")
 ```
 
-## Number of Covid-19 Cases by Gender
+## Covid-19 Cases by Age Groups
 
-## Number of Covid-19 Cases by Age Groups
+In @fig-casebyagegroup, the bar chart provides a clear depiction of the distribution of COVID-19 cases across various age groups. Particularly, the age group 20-29 has the highest number of cases, totaling 77,523 instances and representing 18.83% of the overall cases. This is closely followed by the age groups 30-39 and 0-19, with 73,400 (17.83%) and 55,142 (13.39%) cases, respectively.  In the middle-age categories, 40-49 and 50-59 years old, there are 13.86% and 12.81% of the total cases, respectively. A gradual decline in COVID-19 cases is observed as the age increases, with the age group 60-69 at 8.62%, 70-79 at 5.73%, 80-89 at 5.51%, and the 90+ category at 3.40%.
+
+The concentration of cases in the age group 20-29 highlights the need for targeted outreach strategies for these younger people. Allocating resources strategically in areas with higher numbers of younger people may be an effective mitigation strategy. Furthermore, the comparatively lower number of cases in older age groups, particularly those aged 60 and above, suggests that these groups may have adopted and implemented effective preventive measures. 
+
+```{r}
+#| label: fig-casebyagegroup
+#| fig-cap: Number of covid-19 cases by age groups
+#| echo: false
+#| warning: false
+#| message: false
+
+# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
+analyzed_case_data |> 
+  ggplot(aes(x = age_group)) +
+  geom_bar() +
+  geom_text(
+    stat = 'count',
+    aes(label = scales::percent(..count.. / sum(..count..)),
+        y = ..count..),
+    vjust = -0.5,
+    position = position_stack(vjust = 0.5)
+  ) +
+  theme_minimal() +
+  labs(x = "Age groups",
+       y = "Number of covid-19 cases")
+```
 
 ## Distribution of Covid-19 Cases Across Genders and Age Groups
 
+As depicted in @fig-distribution, the majority of age groups show a higher number of female cases compared to male cases. However, exceptions to this trend are observed in the 0-19 and 70-79 age groups, where male cases exceed females. Moreover, the "Other" category consistently represents the lowest number of cases among all age groups.
 
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+The data reveals that the highest incidence of COVID-19 cases is among females aged 20-29, with over 40,000 cases. The second-highest occurs in females aged 30-39, while the third-highest is observed among males in the 20-29 age group. These findings emphasize the significance of understanding age and gender-specific patterns. This paper seeks to address the question of whether elderly males are more susceptible to COVID-19; however, the data does not support this hypothesis, indicating that patterns of susceptibility may include influences beyond age and gender demographics. 
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-distribution
+#| fig-cap: Distribution of covid-19 cases across genders and age groups
 #| echo: false
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("outputs/data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
+# Reference: https://rstudio-pubs-static.s3.amazonaws.com/215516_c2cee6b2885d419e9248e7eb7c87f887.html
+analyzed_case_data |> 
+  ggplot(aes(x = age_group, fill = gender)) +
+  geom_bar(position = "dodge") +
+  scale_x_discrete("Age groups") +
+  scale_fill_discrete(name = "Gender",
+                      breaks = c("Male", "Female", "Other")) +
   theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
-
-Talk way more about it. 
-
-
-
-# Model
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
-
-# Results
-
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("outputs/models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
+  labs(y = "Number of covid-19 cases")
 ```
 
 
+# Limitations {#sec-limitations}
 
+While this paper provides valuable insights into the age and gender patterns of COVID-19 cases in Toronto, several limitations should be taken into consideration, including occupational exposure, geographical focus, variable measurement, and data accuracy.
 
-# Discussion
+## Occupational Exposure
 
-## First discussion point {#sec-first-point}
+Occupational exposure is a key factor that may influence the demographic distribution of COVID-19 cases. Jobs involving close interaction with the public, such as those in healthcare and social assistance, could pose elevated risks of exposure. It is important to note that within these sectors, there is a higher prevalence of female workers compared to male workers and those aged 25-54 compared to other age groups [@healthCare].
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+## Geographical focus
 
-## Second discussion point
+The focus on Toronto in this paper may limit the generalizability of research findings to other areas or populations, given that diverse areas may exhibit distinct patterns. Therefore, the results presented here may not be universally applicable. The scope of this paper is specifically targeted at Toronto, and other areas are beyond the intended scope of this paper.
 
-## Third discussion point
+## Variable Measurement
 
-## Weaknesses and next steps
+The comparison of COVID-19 cases by gender and age group in Toronto raises considerations about the representativeness of the observed patterns with the population. The resident population data indicates variations in the proportions of males and females, with females slightly outnumbering males [@residentPopulation], and the age distribution, particularly the largest population (20-29 age group) [@populationOfToronto], should be noticed. This difference in the underlying population composition may have implications for the interpretation of COVID-19 cases. Although the population data aligns with the observed COVID-19 case data, it is important to know that the general population's proportions of gender and age groups should be taken into account. This limitation highlights the importance of considering demographic factors, such as comparing the resident population to the COVID-19 case data, to ensure a more comprehensive pattern of my findings. 
 
-Weaknesses and next steps should also be included.
+## Data Accuracy
+
+The data used for this analysis may not fully capture all COVID-19 cases within the population of Toronto. The City of Toronto highlights a significant change in testing guidance by the Ministry of Health starting in 2021 [@covidDashboards], leading to a limitation in the available data, as only specific subsets of the population are being tested. Certain data may no longer accurately represent the broader population [@covidDashboards]. Moreover, certain people infected with COVID-19 may not report to the Ministry of Health, and those who show no symptoms could be overlooked in the dataset. This limitation leads to the challenge of accurately assessing the data on COVID-19 cases.
+
+Future research could address these limitations by exploring other demographic variables and considering a wider geographical scope. This would provide a more comprehensive understanding of the factors that influence the patterns of COVID-19 cases in diverse populations.
+
 
 \newpage
 
-\appendix
 
-# Appendix {-}
+# Appendix {#sec-appendix}
 
+## Data Cleaning
 
-# Additional data details
+The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more within the COVID-19 cases in Toronto. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
 
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
+I conducted a data-cleaning procedure, focusing on variable selection, simplifying variable names, and handling missing values. The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
 
 ```{r}
-#| eval: true
+#| label: tbl-idcasetable
+#| tbl-cap: First six rows of COVID-19 cases by age groups and gender
 #| echo: false
 #| message: false
 #| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
+head(cleaned_case_data) |>
+  kable(
+    col.names = c("Case ID", "Age group", "Gender")
+  )
 ```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
 
 
 \newpage
 
 
 # References
-
-

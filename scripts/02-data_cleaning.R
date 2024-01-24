@@ -7,7 +7,8 @@
 # Pre-requisites: None
 
 #### Workspace setup ####
-#install.packages("tidyverse")
+# install.packages("tidyverse")
+# install.packages("janitor")
 
 library(tidyverse)
 library(janitor)
@@ -57,7 +58,7 @@ cleaned_case_data <-
          ) |>
   tidyr::drop_na()
 
-# Analysis data, including age group and gender
+# Analyzed data, including age group and gender
 analyzed_case_data <-
   cleaned_case_data |>
   select(age_group, gender)

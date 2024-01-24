@@ -16,7 +16,7 @@ library(janitor)
 #### Simulate data ####
 # Number of cases and types of gender and age groups for simulating data
 case_num <- 412122
-simulated_gender <- c("Male", "Female")
+simulated_gender <- c("Male", "Female", "Other")
 simulated_age <- c("0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90+")
 
 # Generate a dataset containing COVID-19 cases and genders
@@ -46,10 +46,10 @@ simulated_data
 
 #### Test data ####
 # Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#simulate-2
-# Check if "gender" contains 2 genders
+# Check if "gender" contains 3 genders
 simulated_data$gender |>
   unique() |>
-  length() == 2
+  length() == 3
 
 # Check if "age_group" contains 9 groups
 simulated_data$age_group |>
