@@ -7,6 +7,7 @@ date: today
 date-format: long
 abstract: "Examining the age and gender patterns of COVID-19 cases in Toronto provides insights into the susceptibility of different demographic groups to the virus. This paper utilizes the dataset from Open Data Toronto, encompassing the period from January 22, 2020, to January 4, 2024. Contrary to the hypothesis that elderly males are more susceptible, the results reveal a pattern, with females aged 20-29 showing the highest susceptibility, exceeding 40,000 cases. This highlights the importance of understanding gender and age-specific patterns for effective public health interventions."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -50,14 +51,36 @@ Researchers have collaborated to provide a better understanding of infectious ag
 
 Given the observation by public health officials that Toronto has a high level of COVID-19 activity [@influenzaActivity], I conducted an analysis of the relationship between COVID-19 cases and age groups, as well as genders, in Toronto. My results indicate a pattern of susceptibility in the distribution of COVID-19 cases in Toronto, where the majority of age groups show a higher number of female cases compared to males. Specifically, the group of females aged 20-29 has the highest number of COVID-19 cases—more than 40,000 cases. Contrary to the hypothesis, my data does not show that elderly males are more susceptible to COVID-19. The observed pattern may be influenced by factors beyond age and gender demographics.
 
-This paper is divided into the Data and Limitations sections. @sec-data Data delves into the various sources used for data collection, cleaning, and analyzing processes, leveraging a comprehensive dataset provided by Toronto Public Health on the City of Toronto's Open Data Portal [@covidCases].  In addition, it provides a detailed analysis of the findings from the data. Moving forward, @sec-limitations Limitations reveal potential constraints, including considerations related to occupational exposure, geographical focus, variable measurement, and data accuracy, that might influence the interpretation of the main findings.
+This paper is divided into the Data and Limitations sections. @sec-data Data delves into the various sources used for data collection, cleaning, and analyzing processes, leveraging a comprehensive dataset provided by Toronto Public Health on the City of Toronto's Open Data Portal [@covidCases].  In addition, @sec-results Results provides a detailed analysis of the findings from the data. Moving forward, @sec-discussion Discussion provides an understanding of the demographic patterns of COVID-19 cases, highlights key findings, and reveals potential limitations, including considerations related to occupational exposure, geographical focus, variable measurement, and data accuracy, that might influence the interpretation of the main findings.
 
 
 # Data {#sec-data}
 
-The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The details of the data cleaning process for the dataset 'COVID-19 Cases in Toronto' [@covidCases] are provided in [Appendix -@sec-appendix]. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
+The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
 
-## Covid-19 Cases by Gender
+## COVID-19 Cases Data
+
+The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more within the COVID-19 cases in Toronto. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
+
+The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
+
+```{r}
+#| label: tbl-idcasetable
+#| tbl-cap: Sample of cleaned COVID-19 cases data
+#| echo: false
+#| message: false
+#| warning: false
+
+head(cleaned_case_data) |>
+  kable(
+    col.names = c("Case ID", "Age group", "Gender")
+  )
+```
+
+
+# Results {#sec-results}
+
+## COVID-19 Cases by Gender
 
 Based on the bar chart of COVID-19 cases in Toronto by gender (see @fig-casebygender), the data reveals that females constitute the largest group, with 219,671 cases, comprising 53.4% of the total cases. Following closely, males represent the second-highest group, with 188,197 cases, accounting for 45.7% of the total cases. Additionally, 3,832 cases fall into the "Other" category, including transgender and not listed gender, making up 0.9% of the total cases. 
 
@@ -86,7 +109,7 @@ analyzed_case_data |>
        y = "Number of covid-19 cases")
 ```
 
-## Covid-19 Cases by Age Groups
+## COVID-19 Cases by Age Groups
 
 In @fig-casebyagegroup, the bar chart provides a clear depiction of the distribution of COVID-19 cases across various age groups. Particularly, the age group 20-29 has the highest number of cases, totaling 77,523 instances and representing 18.83% of the overall cases. This is closely followed by the age groups 30-39 and 0-19, with 73,400 (17.83%) and 55,142 (13.39%) cases, respectively.  In the middle-age categories, 40-49 and 50-59 years old, there are 13.86% and 12.81% of the total cases, respectively. A gradual decline in COVID-19 cases is observed as the age increases, with the age group 60-69 at 8.62%, 70-79 at 5.73%, 80-89 at 5.51%, and the 90+ category at 3.40%.
 
@@ -115,7 +138,7 @@ analyzed_case_data |>
        y = "Number of covid-19 cases")
 ```
 
-## Distribution of Covid-19 Cases Across Genders and Age Groups
+## Distribution of COVID-19 Cases Across Genders and Age Groups
 
 As depicted in @fig-distribution, the majority of age groups show a higher number of female cases compared to male cases. However, exceptions to this trend are observed in the 0-19 and 70-79 age groups, where male cases exceed females. Moreover, the "Other" category consistently represents the lowest number of cases among all age groups.
 
@@ -140,52 +163,34 @@ analyzed_case_data |>
 ```
 
 
-# Limitations {#sec-limitations}
+# Discussion {#sec-discussion}
+
+## Interpretation of Findings
+The examination of COVID-19 cases by gender reveals that females represent 53.4% of the cases in Toronto and males represent 45.7% (see @fig-casebygender), which does not show significant differences between female and male cases. The age-stratified analysis of COVID-19 cases shows that the 20-29 age group is most affected by COVID-19, accounting for 18.83% of the overall cases (see @fig-casebyagegroup). Conversely, older age groups (40+) have lower case numbers. Moreover, the intersectional analysis of gender and age groups shows that most age groups have a higher number of female cases, with exceptions in the 0-19 and 70-79 age groups where male cases are higher than female cases (see @fig-distribution). These findings do not support the hypothetical question: "Are elderly males more susceptible to COVID-19?" Additional demographic variables, such as socioeconomic status and cultural factors, may influence COVID-19 patterns in diverse populations.
+
+## Limitations
 
 While this paper provides valuable insights into the age and gender patterns of COVID-19 cases in Toronto, several limitations should be taken into consideration, including occupational exposure, geographical focus, variable measurement, and data accuracy.
 
-## Occupational Exposure
+### Occupational Exposure
 
 Occupational exposure is a key factor that may influence the demographic distribution of COVID-19 cases. Jobs involving close interaction with the public, such as those in healthcare and social assistance, could pose elevated risks of exposure. It is important to note that within these sectors, there is a higher prevalence of female workers compared to male workers and those aged 25-54 compared to other age groups [@healthCare].
 
-## Geographical focus
+### Geographical focus
 
 The focus on Toronto in this paper may limit the generalizability of research findings to other areas or populations, given that diverse areas may exhibit distinct patterns. Therefore, the results presented here may not be universally applicable. The scope of this paper is specifically targeted at Toronto, and other areas are beyond the intended scope of this paper.
 
-## Variable Measurement
+### Variable Measurement
 
 The comparison of COVID-19 cases by gender and age group in Toronto raises considerations about the representativeness of the observed patterns with the population. The resident population data indicates variations in the proportions of males and females, with females slightly outnumbering males [@residentPopulation], and the age distribution, particularly the largest population (20-29 age group) [@populationOfToronto], should be noticed. This difference in the underlying population composition may have implications for the interpretation of COVID-19 cases. Although the population data aligns with the observed COVID-19 case data, it is important to know that the general population's proportions of gender and age groups should be taken into account. This limitation highlights the importance of considering demographic factors, such as comparing the resident population to the COVID-19 case data, to ensure a more comprehensive pattern of my findings. 
 
-## Data Accuracy
+### Data Accuracy
 
 The data used for this analysis may not fully capture all COVID-19 cases within the population of Toronto. The City of Toronto highlights a significant change in testing guidance by the Ministry of Health starting in 2021 [@covidDashboards], leading to a limitation in the available data, as only specific subsets of the population are being tested. Certain data may no longer accurately represent the broader population [@covidDashboards]. Moreover, certain people infected with COVID-19 may not report to the Ministry of Health, and those who show no symptoms could be overlooked in the dataset. This limitation leads to the challenge of accurately assessing the data on COVID-19 cases.
 
-Future research could address these limitations by exploring other demographic variables and considering a wider geographical scope. This would provide a more comprehensive understanding of the factors that influence the patterns of COVID-19 cases in diverse populations.
+## Next Steps
 
-
-\newpage
-
-
-# Appendix {-}
-
-# Data Cleaning {#sec-appendix}
-
-The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more within the COVID-19 cases in Toronto. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
-
-I conducted a data-cleaning procedure, focusing on variable selection, simplifying variable names, and handling missing values. The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
-
-```{r}
-#| label: tbl-idcasetable
-#| tbl-cap: First six rows of COVID-19 cases by age groups and gender
-#| echo: false
-#| message: false
-#| warning: false
-
-head(cleaned_case_data) |>
-  kable(
-    col.names = c("Case ID", "Age group", "Gender")
-  )
-```
+Future research could address these limitations by exploring other demographic variables and considering a wider geographical scope. This exploration would provide a more comprehensive understanding of the factors that influence the patterns of COVID-19 cases across diverse populations. Future research endeavors have the potential to refine public health strategies, tailor interventions to specific population needs, and contribute substantially to the global understanding of the multifaceted nature of the COVID-19 pandemic.
 
 
 \newpage
