@@ -14,7 +14,7 @@ library(opendatatoronto)
 library(tidyverse)
 
 #### Download COVID-19 cases in Toronto data ####
-# Code from: https://open.toronto.ca/dataset/covid-19-cases-in-toronto/
+# COVID-19 cases Dataset and code are from: https://open.toronto.ca/dataset/covid-19-cases-in-toronto/
 # Get all resources from this package
 resources <- list_package_resources("64b54586-6180-4485-83eb-81e8fae3b8fe")
 

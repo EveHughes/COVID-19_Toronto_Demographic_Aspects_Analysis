@@ -4,7 +4,9 @@
 # Date: 16 January 2024
 # Contact: amie.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: None
+# Pre-requisites:
+#   00-simulate_data.R
+#   01-download_data.R
 
 #### Workspace setup ####
 # install.packages("tidyverse")
@@ -21,7 +23,9 @@ raw_case_data <- read_csv("inputs/data/raw_case_data.csv")
 # Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html
 cleaned_case_data <-
   raw_case_data |>
+  # Clean the column names
   clean_names() |>
+  # Transform the existing "age_group" values into standardized age groups
   mutate(
     age_group =
       case_match(
@@ -37,6 +41,7 @@ cleaned_case_data <-
         "90 and older" ~ "90+",
       )
   ) |>
+  # Transform the existing "gender" values into standardized categories ("Female", "Male", or "Other")
   mutate(
     client_gender =
       case_match(
@@ -52,10 +57,12 @@ cleaned_case_data <-
         "NOT LISTED, PLEASE SPECIFY" ~ "Other",
       )
   ) |>
+  # Rename the columns
   select(assigned_id, age_group, client_gender) |>
   rename(case_id = assigned_id,
          gender = client_gender
          ) |>
+  # Remove any rows with missing values (NA) in the dataset
   tidyr::drop_na()
 
 # Analyzed data, including age group and gender

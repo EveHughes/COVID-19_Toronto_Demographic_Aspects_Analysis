@@ -60,9 +60,9 @@ The data for this paper was obtained from the City of Toronto's Open Data Portal
 
 ## COVID-19 Cases Data
 
-The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more within the COVID-19 cases in Toronto. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
+The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
 
-The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
+The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed. Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
 
 ```{r}
 #| label: tbl-idcasetable
@@ -71,8 +71,10 @@ The primary variables selected for analysis were chosen based on their relevance
 #| message: false
 #| warning: false
 
+# Display the first six rows of the "cleaned_case_data" dataset
 head(cleaned_case_data) |>
   kable(
+    # Give each column a name
     col.names = c("Case ID", "Age group", "Gender")
   )
 ```
@@ -93,23 +95,31 @@ The gender breakdown of COVID-19 cases highlights a distribution pattern, unders
 #| warning: false
 #| message: false
 
+# Create a bar chart to visualize the distribution of COVID-19 cases by gender based on the analyzed_case_data dataset
 # Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
 analyzed_case_data |> 
   ggplot(aes(x = gender)) +
-  geom_bar() +
+  # Change bar color to green
+  geom_bar(fill = "#D4E7C5") +
   geom_text(
+    # Use the 'count' statistic to calculate counts for each category
     stat = 'count',
+    # Use percentage labels based on count and set y position of text labels
     aes(label = scales::percent(..count.. / sum(..count..)),
         y = ..count..),
+    # Adjust vertical position of text labels
     vjust = -0.5,
+    # Stack text labels on top of bars
     position = position_stack(vjust = 0.5)
   ) +
+  # Apply a minimal theme to the chart
   theme_minimal() +
+  # Label x-axis as "Gender" and y-axis as "Number of COVID-19 cases"
   labs(x = "Gender",
-       y = "Number of covid-19 cases")
+       y = "Number of COVID-19 cases")
 ```
 
-## COVID-19 Cases by Age Groups
+## COVID-19 Cases by Age Group
 
 In @fig-casebyagegroup, the bar chart provides a clear depiction of the distribution of COVID-19 cases across various age groups. Particularly, the age group 20-29 has the highest number of cases, totaling 77,523 instances and representing 18.83% of the overall cases. This is closely followed by the age groups 30-39 and 0-19, with 73,400 (17.83%) and 55,142 (13.39%) cases, respectively.  In the middle-age categories, 40-49 and 50-59 years old, there are 13.86% and 12.81% of the total cases, respectively. A gradual decline in COVID-19 cases is observed as the age increases, with the age group 60-69 at 8.62%, 70-79 at 5.73%, 80-89 at 5.51%, and the 90+ category at 3.40%.
 
@@ -117,25 +127,35 @@ The concentration of cases in the age group 20-29 highlights the need for target
 
 ```{r}
 #| label: fig-casebyagegroup
-#| fig-cap: Number of covid-19 cases by age groups
+#| fig-cap: Number of covid-19 cases by age group
 #| echo: false
 #| warning: false
 #| message: false
 
+# Create a bar chart to visualize the distribution of COVID-19 cases by age group based on the analyzed_case_data dataset
 # Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
 analyzed_case_data |> 
   ggplot(aes(x = age_group)) +
-  geom_bar() +
+  # Change bar color to green
+  geom_bar(fill = "#D4E7C5") +
   geom_text(
+    # Use the 'count' statistic to calculate counts for each category
     stat = 'count',
+    # Use percentage labels based on count and set y position of text labels
     aes(label = scales::percent(..count.. / sum(..count..)),
         y = ..count..),
+    # Adjust vertical position of text labels
     vjust = -0.5,
-    position = position_stack(vjust = 0.5)
+    # Stack text labels on top of bars
+    position = position_stack(vjust = 0.5),
+    # Change text size to 3
+    size = 3
   ) +
+  # Apply a minimal theme to the chart
   theme_minimal() +
-  labs(x = "Age groups",
-       y = "Number of covid-19 cases")
+  # Label x-axis as "Age group" and y-axis as "Number of COVID-19 cases"
+  labs(x = "Age group",
+       y = "Number of COVID-19 cases")
 ```
 
 ## Distribution of COVID-19 Cases Across Genders and Age Groups
@@ -153,20 +173,32 @@ The data reveals that the highest incidence of COVID-19 cases is among females a
 
 # Reference: https://rstudio-pubs-static.s3.amazonaws.com/215516_c2cee6b2885d419e9248e7eb7c87f887.html
 analyzed_case_data |> 
+  # Create a ggplot object with age_group on the x-axis and gender as fill color
   ggplot(aes(x = age_group, fill = gender)) +
+  # Add a grouped bar layer to create the grouped bar chart
   geom_bar(position = "dodge") +
-  scale_x_discrete("Age groups") +
+  # Scale the x-axis labels to display "Age group"
+  scale_x_discrete("Age group") +
+  # Scale the fill color to display "Gender" and specify the break points: "Male", "Female", "Other"
   scale_fill_discrete(name = "Gender",
                       breaks = c("Male", "Female", "Other")) +
+  # Apply a minimal theme to the chart
   theme_minimal() +
-  labs(y = "Number of covid-19 cases")
+  # Label y-axis as "Number of COVID-19 cases"
+  labs(y = "Number of COVID-19 cases")
 ```
 
 
 # Discussion {#sec-discussion}
 
 ## Interpretation of Findings
-The examination of COVID-19 cases by gender reveals that females represent 53.4% of the cases in Toronto and males represent 45.7% (see @fig-casebygender), which does not show significant differences between female and male cases. The age-stratified analysis of COVID-19 cases shows that the 20-29 age group is most affected by COVID-19, accounting for 18.83% of the overall cases (see @fig-casebyagegroup). Conversely, older age groups (40+) have lower case numbers. Moreover, the intersectional analysis of gender and age groups shows that most age groups have a higher number of female cases, with exceptions in the 0-19 and 70-79 age groups where male cases are higher than female cases (see @fig-distribution). These findings do not support the hypothetical question: "Are elderly males more susceptible to COVID-19?" Additional demographic variables, such as socioeconomic status and cultural factors, may influence COVID-19 patterns in diverse populations.
+The examination of COVID-19 cases by gender reveals that females represent 53.4% of the cases in Toronto and males represent 45.7% (see @fig-casebygender), which does not show significant differences between female and male cases. This indicates that both genders are equally affected by COVID-19 in Toronto. Although the overall proportions may appear similar, there may be differences in the severity of the cases with each gender that need further investigation.
+
+The age-stratified analysis of COVID-19 cases shows that the 20-29 age group is most affected by COVID-19, accounting for 18.83% of the overall cases (see @fig-casebyagegroup). Conversely, older age groups, particularly those aged 40 and above, have lower case numbers. This suggests a potential age-related pattern in COVID-19 susceptibility or exposure and highlights the importance of targeted age-specific interventions and public health measures to effectively mitigate the virus's spread.
+
+Moreover, the intersectional analysis of gender and age groups shows that most age groups have a higher number of female cases, with exceptions in the 0-19 and 70-79 age groups where male cases are higher than female cases (see @fig-distribution). This highlights the complexity of COVID-19 epidemiology. Further research is needed to explore the underlying factors that cause this pattern.
+
+These findings do not support the hypothetical question: "Are elderly males more susceptible to COVID-19?" Instead, the data suggests that COVID-19 patterns are influenced by factors beyond age and gender demographics. Additional demographic variables, such as socioeconomic status and cultural factors, may influence COVID-19 patterns in diverse populations.
 
 ## Limitations
 
@@ -190,7 +222,7 @@ The data used for this analysis may not fully capture all COVID-19 cases within 
 
 ## Next Steps
 
-Future research could address these limitations by exploring other demographic variables and considering a wider geographical scope. This exploration would provide a more comprehensive understanding of the factors that influence the patterns of COVID-19 cases across diverse populations. Future research endeavors have the potential to refine public health strategies, tailor interventions to specific population needs, and contribute substantially to the global understanding of the multifaceted nature of the COVID-19 pandemic.
+Future research could address these limitations by exploring other demographic variables and considering a wider geographical scope. This exploration would provide a more detailed understanding of the factors that influence the patterns of COVID-19 cases across diverse populations. This could have the potential to refine public health strategies, inform targeted public health interventions, and contribute substantially to the global understanding of the COVID-19 pandemic.
 
 
 \newpage

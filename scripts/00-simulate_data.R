@@ -51,6 +51,9 @@ simulated_data$gender |>
   unique() |>
   length() == 3
 
+# Check if "gender" contains 3 specified variables: "Male", "Female", and "Other"
+all(unique(simulated_data$gender) %in% c("Male", "Female", "Other"))
+
 # Check if "age_group" contains 9 groups
 simulated_data$age_group |>
   unique() |>
