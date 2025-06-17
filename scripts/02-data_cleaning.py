@@ -71,4 +71,4 @@ analyzed_case_data = cleaned_case_data[["age_group", "gender"]]
 cleaned_case_data.to_csv("outputs/data/cleaned_case_data.csv", index=False)
 
 # Save analyzed data
-analyzed_case_data.to_csv("analyzed_case_data.csv", index=False)
+analyzed_case_data.to_csv("outputs/data/analyzed_case_data.csv", index=False)

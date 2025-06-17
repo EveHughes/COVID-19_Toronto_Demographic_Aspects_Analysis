@@ -5,50 +5,50 @@
 # Contact: amie.liu@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
-#   00-simulate_data.R
-#   01-download_data.R
-#   02-data_cleaning.R
+#   00-simulate_data.py
+#   01-download_data.py
+#   02-data_cleaning.py
 
 #### Workspace setup ####
-# install.packages("tidyverse")
-# install.packages("janitor")
+import unittest
+import pandas as pd
+import numpy as np
 
-library(tidyverse)
-library(janitor)
+class TestCleanedCovidData(unittest.TestCase):
 
-#### Test data ####
-# Read data
-cleaned_case_data <- read_csv("outputs/data/cleaned_case_data.csv")
+    @classmethod
+    def setUpClass(cls):
+        cls.df = pd.read_csv("outputs/data/cleaned_case_data.csv")
 
-# Test cleaned data
-# Check if all column names match the specified names and order: "case_id", "age_group", "gender"
-all(colnames(cleaned_case_data) == c("case_id", "age_group", "gender"))
+    def test_column_names_and_order(self):
+        expected_columns = ["case_id", "age_group", "gender"]
+        self.assertEqual(list(self.df.columns), expected_columns, "Column names or order are incorrect")
 
-# Check if the minimum value of "case_id" is 1
-cleaned_case_data$case_id |> min() == 1
+    def test_case_id_min_value(self):
+        self.assertEqual(self.df["case_id"].min(), 1, "Minimum case_id is not 1")
 
-# Check if the length of "case_id" is 411700
-cleaned_case_data$case_id |> length() == 411700
+    def test_case_id_length(self):
+        self.assertEqual(len(self.df["case_id"]), 411700, "case_id length is not 411700")
 
-# Check if the class of "case_id" is numeric
-cleaned_case_data$case_id |> class() == "numeric"
+    def test_case_id_is_numeric(self):
+        self.assertTrue(np.issubdtype(self.df["case_id"].dtype, np.number), "case_id is not numeric")
 
-# Check if "age_group" contains 9 groups
-cleaned_case_data$age_group |>
-  unique() |>
-  length() == 9
+    def test_age_group_unique_count(self):
+        self.assertEqual(self.df["age_group"].nunique(), 9, "age_group does not contain 9 unique values")
 
-# Check if the length of "age_group" is 411700
-cleaned_case_data$age_group |> length() == 411700
+    def test_age_group_length(self):
+        self.assertEqual(len(self.df["age_group"]), 411700, "age_group length is not 411700")
 
-# Check if "gender" contains 3 genders
-cleaned_case_data$gender |>
-  unique() |>
-  length() == 3
+    def test_gender_unique_count(self):
+        self.assertEqual(self.df["gender"].nunique(), 3, "gender does not contain 3 unique values")
 
-# Check if "gender" contains 3 specified variables: "Male", "Female", and "Other"
-all(unique(cleaned_case_data$gender) %in% c("Male", "Female", "Other"))
+    def test_gender_allowed_values(self):
+        valid_genders = {"Male", "Female", "Other"}
+        actual_values = set(self.df["gender"].unique())
+        self.assertTrue(actual_values.issubset(valid_genders), f"Unexpected gender values: {actual_values}")
 
-# Check if the length of "gender" is 411700
-cleaned_case_data$gender |> length() == 411700
+    def test_gender_length(self):
+        self.assertEqual(len(self.df["gender"]), 411700, "gender length is not 411700")
 
+if __name__ == "__main__":
+    unittest.main()
