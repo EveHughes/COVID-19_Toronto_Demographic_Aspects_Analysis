@@ -12,34 +12,19 @@ number-sections: true
 bibliography: references.bib
 ---
 
-```{r}
+```{python}
 #| include: false
 #| warning: false
 #| message: false
 
-# install.packages("tidyverse")
-# install.packages("here")
-# install.packages("knitr")
+#### Workspace setup ####
+import pandas as pd
 
-library(tidyverse)
-library(here)
-library(knitr)
-
-# Set the working directory to the project's root
-setwd(here())
-
-### Explore ###
+#### Explore ####
 # Read cleaned case data
-cleaned_case_data <- 
-  read_csv(
-    "outputs/data/cleaned_case_data.csv", 
-    show_col_types = FALSE)
+cleaned_case_data = pd.read_csv("../data/cleaned_case_data.csv")
+analyzed_case_data = pd.read_csv("../data/analyzed_case_data.csv")
 
-# Read analyzed case data
-analyzed_case_data <-
-  read_csv(
-    "outputs/data/analyzed_case_data.csv",
-    show_col_types = FALSE)
 ```
 
 
@@ -64,19 +49,22 @@ The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained
 
 The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed. Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
 
-```{r}
+```{python}
 #| label: tbl-idcasetable
 #| tbl-cap: Sample of cleaned COVID-19 cases data
 #| echo: false
 #| message: false
 #| warning: false
 
-# Display the first six rows of the "cleaned_case_data" dataset
-head(cleaned_case_data) |>
-  kable(
-    # Give each column a name
-    col.names = c("Case ID", "Age group", "Gender")
-  )
+sample = cleaned_case_data.head().rename(
+    columns={
+        "case_id": "Case ID",
+        "age_group": "Age group",
+        "gender": "Gender"
+    }
+)
+
+sample
 ```
 
 
@@ -88,35 +76,40 @@ Based on the bar chart of COVID-19 cases in Toronto by gender (see @fig-casebyge
 
 The gender breakdown of COVID-19 cases highlights a distribution pattern, underscoring the importance of integrating gender-specific considerations into public health interventions. There are no significant differences between female and male cases. However, the higher occurrence of cases among females suggests a need for targeted measurements that consider gender-specific factors. These findings may prompt health officials to communicate and implement outreach strategies, ensuring the effectiveness of preventive measures and vaccination campaigns across diverse gender groups.
 
-```{r}
+```{python}
 #| label: fig-casebygender
-#| fig-cap: Number of covid-19 cases by gender
+#| fig-cap: Number of COVID-19 cases by gender
 #| echo: false
 #| warning: false
 #| message: false
 
-# Create a bar chart to visualize the distribution of COVID-19 cases by gender based on the analyzed_case_data dataset
-# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
-analyzed_case_data |> 
-  ggplot(aes(x = gender)) +
-  # Change bar color to green
-  geom_bar(fill = "#D4E7C5") +
-  geom_text(
-    # Use the 'count' statistic to calculate counts for each category
-    stat = 'count',
-    # Use percentage labels based on count and set y position of text labels
-    aes(label = scales::percent(..count.. / sum(..count..)),
-        y = ..count..),
-    # Adjust vertical position of text labels
-    vjust = -0.5,
-    # Stack text labels on top of bars
-    position = position_stack(vjust = 0.5)
-  ) +
-  # Apply a minimal theme to the chart
-  theme_minimal() +
-  # Label x-axis as "Gender" and y-axis as "Number of COVID-19 cases"
-  labs(x = "Gender",
-       y = "Number of COVID-19 cases")
+import matplotlib.pyplot as plt
+
+# Count occurrences by gender
+gender_counts = analyzed_case_data["gender"].value_counts()
+gender_percent = gender_counts / gender_counts.sum()
+
+# Plot
+fig, ax = plt.subplots()
+
+bars = ax.bar(gender_counts.index, gender_counts.values, color="#D4E7C5")
+
+# Add percentage labels above bars
+for i, (count, pct) in enumerate(zip(gender_counts.values, gender_percent)):
+    ax.text(i, count + 1000, f"{pct:.1%}", ha='center', va='bottom')
+
+# Label axes and apply minimal formatting
+ax.set_xlabel("Gender")
+ax.set_ylabel("Number of COVID-19 cases")
+ax.set_title("")  # Leave empty if you don't want a title
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.yaxis.grid(True, linestyle='--', alpha=0.4)
+ax.set_axisbelow(True)
+
+plt.tight_layout()
+plt.show()
+
 ```
 
 ## COVID-19 Cases by Age Group
@@ -125,37 +118,40 @@ In @fig-casebyagegroup, the bar chart provides a clear depiction of the distribu
 
 The concentration of cases in the age group 20-29 highlights the need for targeted outreach strategies for these younger people. Allocating resources strategically in areas with higher numbers of younger people may be an effective mitigation strategy. Furthermore, the comparatively lower number of cases in older age groups, particularly those aged 60 and above, suggests that these groups may have adopted and implemented effective preventive measures. 
 
-```{r}
+```{python}
 #| label: fig-casebyagegroup
-#| fig-cap: Number of covid-19 cases by age group
+#| fig-cap: Number of COVID-19 cases by age group
 #| echo: false
 #| warning: false
 #| message: false
 
-# Create a bar chart to visualize the distribution of COVID-19 cases by age group based on the analyzed_case_data dataset
-# Reference: https://tellingstorieswithdata.com/02-drinking_from_a_fire_hose.html#explore 
-analyzed_case_data |> 
-  ggplot(aes(x = age_group)) +
-  # Change bar color to green
-  geom_bar(fill = "#D4E7C5") +
-  geom_text(
-    # Use the 'count' statistic to calculate counts for each category
-    stat = 'count',
-    # Use percentage labels based on count and set y position of text labels
-    aes(label = scales::percent(..count.. / sum(..count..)),
-        y = ..count..),
-    # Adjust vertical position of text labels
-    vjust = -0.5,
-    # Stack text labels on top of bars
-    position = position_stack(vjust = 0.5),
-    # Change text size to 3
-    size = 3
-  ) +
-  # Apply a minimal theme to the chart
-  theme_minimal() +
-  # Label x-axis as "Age group" and y-axis as "Number of COVID-19 cases"
-  labs(x = "Age group",
-       y = "Number of COVID-19 cases")
+import matplotlib.pyplot as plt
+
+# Count occurrences by age group and preserve order
+age_order = ["0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90+"]
+age_counts = analyzed_case_data["age_group"].value_counts().reindex(age_order)
+age_percent = age_counts / age_counts.sum()
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 5))
+
+bars = ax.bar(age_counts.index, age_counts.values, color="#D4E7C5")
+
+# Add percentage labels
+for i, (count, pct) in enumerate(zip(age_counts.values, age_percent)):
+    ax.text(i, count + max(age_counts.values) * 0.01, f"{pct:.1%}", ha='center', va='bottom', fontsize=8)
+
+# Label axes and apply minimal styling
+ax.set_xlabel("Age group")
+ax.set_ylabel("Number of COVID-19 cases")
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.yaxis.grid(True, linestyle='--', alpha=0.4)
+ax.set_axisbelow(True)
+
+plt.tight_layout()
+plt.show()
+
 ```
 
 ## Distribution of COVID-19 Cases Across Genders and Age Groups
@@ -164,28 +160,54 @@ As depicted in @fig-distribution, the majority of age groups show a higher numbe
 
 The data reveals that the highest incidence of COVID-19 cases is among females aged 20-29, with over 40,000 cases. The second-highest occurs in females aged 30-39, while the third-highest is observed among males in the 20-29 age group. These findings emphasize the significance of understanding age and gender-specific patterns. This paper seeks to address the question of whether elderly males are more susceptible to COVID-19; however, the data does not support this hypothesis, indicating that patterns of susceptibility may include influences beyond age and gender demographics. 
 
-```{r}
+```{python}
 #| label: fig-distribution
-#| fig-cap: Distribution of covid-19 cases across genders and age groups
+#| fig-cap: Distribution of COVID-19 cases across genders and age groups
 #| echo: false
 #| warning: false
 #| message: false
 
-# Reference: https://rstudio-pubs-static.s3.amazonaws.com/215516_c2cee6b2885d419e9248e7eb7c87f887.html
-analyzed_case_data |> 
-  # Create a ggplot object with age_group on the x-axis and gender as fill color
-  ggplot(aes(x = age_group, fill = gender)) +
-  # Add a grouped bar layer to create the grouped bar chart
-  geom_bar(position = "dodge") +
-  # Scale the x-axis labels to display "Age group"
-  scale_x_discrete("Age group") +
-  # Scale the fill color to display "Gender" and specify the break points: "Male", "Female", "Other"
-  scale_fill_discrete(name = "Gender",
-                      breaks = c("Male", "Female", "Other")) +
-  # Apply a minimal theme to the chart
-  theme_minimal() +
-  # Label y-axis as "Number of COVID-19 cases"
-  labs(y = "Number of COVID-19 cases")
+import matplotlib.pyplot as plt
+import numpy as np
+
+# --- Prep counts -----------------------------------------------------------
+age_order    = ["0-19", "20-29", "30-39", "40-49", "50-59",
+                "60-69", "70-79", "80-89", "90+"]
+gender_order = ["Male", "Female", "Other"]
+
+counts = (
+    analyzed_case_data
+      .groupby(["age_group", "gender"])
+      .size()                               # tally
+      .unstack(fill_value=0)                # pivot to wide
+      .reindex(age_order)                   # keep age order
+)[gender_order]                              # keep gender order
+
+# --- Plot ------------------------------------------------------------------
+x      = np.arange(len(age_order))
+width  = 0.25                               # width of each bar
+fig, ax = plt.subplots(figsize=(10, 5))
+
+for i, gender in enumerate(gender_order):
+    ax.bar(x + (i - 1)*width,               # dodge position
+           counts[gender],
+           width=width,
+           label=gender)
+
+# Axis / style tweaks
+ax.set_xlabel("Age group")
+ax.set_ylabel("Number of COVID-19 cases")
+ax.set_xticks(x)
+ax.set_xticklabels(age_order)
+ax.legend(title="Gender")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.yaxis.grid(True, linestyle="--", alpha=0.4)
+ax.set_axisbelow(True)
+
+plt.tight_layout()
+plt.show()
+
 ```
 
 
