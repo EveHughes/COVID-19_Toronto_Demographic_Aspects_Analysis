@@ -41,7 +41,7 @@ This paper is divided into the Data and Limitations sections. @sec-data Data del
 
 # Data {#sec-data}
 
-The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The data analysis involved using the R programming language [@citeR] along with the 'tidyverse' [@citeTidyverse] 'here' [@citeHere], 'janitor' [@citeJanitor], 'knitr' [@citeKnitr] packages for data collection, cleaning, and analysis. Within the 'tidyverse' package [@citeTidyverse], I used 'readr' [@citeReadr], 'dplyr' [@citeDplyr], 'tidyr' [@citeTidyr], and 'ggplot2' [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating bar charts.
+The data for this paper was obtained from the City of Toronto's Open Data Portal through the 'opendatatoronto' library [@openDataToronto]. The data analysis involved using the R programming language [@python] along with the 'numpy' [@numpy] and 'pandas' [@pandas] packages for data collection, cleaning, and analysis. 'matplotlib' [@matplotlib] was used for creating bar charts.
 
 ## COVID-19 Cases Data
 
