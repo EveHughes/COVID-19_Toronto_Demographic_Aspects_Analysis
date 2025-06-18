@@ -45,7 +45,7 @@ The data for this paper was obtained from the City of Toronto's Open Data Portal
 
 ## COVID-19 Cases Data
 
-The dataset 'COVID-19 Cases in Toronto'  [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
+The dataset 'COVID-19 Cases in Toronto' [@covidCases] was utilized and obtained from 'opendatatoronto' library [@openDataToronto]. It comprises 412,122 records and 15 variables, including assigned ID, age group, neighborhood name, episode date, client gender, and more. The data cover the period from January 22, 2020, to January 4, 2024, and are structured in CSV file format. 
 
 The primary variables selected for analysis were chosen based on their relevance to my research question, relating to age and gender. If one categorical value was missing, then the entire row was removed. Therefore, the cleaned COVID-19 cases dataset now includes three variables: case ID, gender, and age group (see @tbl-idcasetable). The total number of rows has been reduced from 412,122 to 411,700.
 
