@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Downloads and saves the data from the Open Data Toronto portal
-# Author: Amie Liu
+# Author: Lena Wang
 # Date: 16 January 2024
 # Contact: amie.liu@mail.utoronto.ca
 # License: MIT
@@ -9,19 +9,12 @@
 #### Workspace setup ####
 import pandas as pd
 from io import StringIO
-from datetime import datetime
 
 #### Download COVID-19 cases in Toronto data ####
 import requests
 
-# Toronto Open Data is stored in a CKAN instance. It's APIs are documented here:
-# https://docs.ckan.org/en/latest/api/
-
-# To hit our API, you'll be making requests to:
 base_url = "https://ckan0.cf.opendata.inter.prod-toronto.ca"
 
-# Datasets are called "packages". Each package can contain many "resources"
-# To retrieve the metadata for this package and its resources, use the package name in this page's URL:
 url = base_url + "/api/3/action/package_show"
 params = { "id": "covid-19-cases-in-toronto"}
 package = requests.get(url, params = params).json()

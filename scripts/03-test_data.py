@@ -1,8 +1,8 @@
 #### Preamble ####
 # Purpose: Test cleaned COVID-19 cases data
-# Author: Amie Liu
+# Author: Lena Wang
 # Date: 25 January 2024
-# Contact: amie.liu@mail.utoronto.ca
+# Contact: lena.wang@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
 #   00-simulate_data.py

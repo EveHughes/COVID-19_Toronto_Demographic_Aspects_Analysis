@@ -1,8 +1,8 @@
 #### Preamble ####
 # Purpose: Cleans the raw COVID-19 cases data
-# Author: Amie Liu
+# Author: Lena Wang
 # Date: 16 January 2024
-# Contact: amie.liu@mail.utoronto.ca
+# Contact: lena.wang@mail.utoronto.ca
 # License: MIT
 # Pre-requisites:
 #   00-simulate_data.py
@@ -10,7 +10,6 @@
 
 #### Workspace setup ####
 import pandas as pd
-import numpy as np
 
 #### Clean data ####
 # Read raw data
